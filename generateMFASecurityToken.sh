@@ -58,7 +58,6 @@ if [ "$GENERATE_ST" = "true" ];then
         aws configure set aws_session_token "$AWS_SESSION_TOKEN" --profile $MFA_PROFILE_NAME
         aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID" --profile $MFA_PROFILE_NAME
         aws configure set expiration "$EXPIRATION" --profile $MFA_PROFILE_NAME
-        aws configure set expiration "$EXPIRATION" --profile $MFA_PROFILE_NAME
         aws configure set region "$DEFAULT_REGION" --profile $MFA_PROFILE_NAME
         aws configure set output "$DEFAULT_OUTPUT" --profile $MFA_PROFILE_NAME
         echo "STS Session Token generated and updated in AWS credentials file successfully."
