@@ -54,10 +54,10 @@ if [ "$GENERATE_ST" = "true" ];then
     if [ $? -ne 0 ];then
         echo "An error occured. AWS credentials file not updated"
     else
-        AWS_ACCESS_KEY_ID=`echo $creds |jq .Credentials.AccessKeyId`
-        EXPIRATION=`echo $creds |jq .Credentials.Expiration`
-        AWS_SECRET_ACCESS_KEY=`echo $creds |jq .Credentials.SecretAccessKey`
-        AWS_SESSION_TOKEN=`echo $creds |jq .Credentials.SessionToken`
+        AWS_ACCESS_KEY_ID=`echo $creds |jq -r .Credentials.AccessKeyId`
+        EXPIRATION=`echo $creds |jq -r .Credentials.Expiration`
+        AWS_SECRET_ACCESS_KEY=`echo $creds |jq -r .Credentials.SecretAccessKey`
+        AWS_SESSION_TOKEN=`echo $creds |jq -r .Credentials.SessionToken`
 
         aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY" --profile $MFA_PROFILE_NAME
         aws configure set aws_session_token "$AWS_SESSION_TOKEN" --profile $MFA_PROFILE_NAME
