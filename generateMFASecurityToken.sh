@@ -50,10 +50,15 @@ fi
 if [ "$GENERATE_ST" = "true" ];then
     read -p "Token code for MFA Device ($MFA_SERIAL): " TOKEN_CODE
     echo "Generating new IAM STS Token ..."
-    read -r AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN EXPIRATION AWS_ACCESS_KEY_ID < <(aws sts get-session-token --profile $BASE_PROFILE_NAME --output text --query 'Credentials.*' --serial-number $MFA_SERIAL --token-code $TOKEN_CODE)
+    creds=`aws sts get-session-token --profile $BASE_PROFILE_NAME --serial-number $MFA_SERIAL --token-code $TOKEN_CODE`
     if [ $? -ne 0 ];then
         echo "An error occured. AWS credentials file not updated"
     else
+        AWS_ACCESS_KEY_ID=`echo $creds |jq -r .Credentials.AccessKeyId`
+        EXPIRATION=`echo $creds |jq -r .Credentials.Expiration`
+        AWS_SECRET_ACCESS_KEY=`echo $creds |jq -r .Credentials.SecretAccessKey`
+        AWS_SESSION_TOKEN=`echo $creds |jq -r .Credentials.SessionToken`
+
         aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY" --profile $MFA_PROFILE_NAME
         aws configure set aws_session_token "$AWS_SESSION_TOKEN" --profile $MFA_PROFILE_NAME
         aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID" --profile $MFA_PROFILE_NAME
